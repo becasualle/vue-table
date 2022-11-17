@@ -2,12 +2,12 @@
   <header></header>
 
   <main>
-    <DataTable :data="tableData" :columns="tableColumns" />
+    <!-- <DataTable :data="tableData" :columns="tableColumns" /> -->
   </main>
 </template>
 
 <script setup lang="ts">
-import { watchEffect, ref, computed } from "vue";
+import { watchEffect, ref, computed, onUpdated } from "vue";
 import DataTable from "./components/DataTable.vue";
 import { apiData } from "./data/api";
 import type { Data } from "./data/api";
@@ -25,7 +25,6 @@ export type TableColumns =
 const tableInfo = ref<Data | null>(null);
 
 watchEffect(async () => {
-  console.log("watch effect");
   // mock API request
   const data = await new Promise((resolve) => {
     setTimeout(() => {
@@ -45,7 +44,22 @@ const tableColumns: TableColumns[] = [
   "Телефон",
 ];
 
-const tableData = computed(() => tableInfo.value?.results);
+// Get rid of redundant information from API data leaving only what is necessary for table data
+const tableData = computed(() => {
+  const formattedData = tableInfo.value?.results.map((entry) => {
+    const {
+      picture: { thumbnail: avatar },
+      gender,
+      location: { country },
+      dob: { date: timestamp },
+      email,
+      phone,
+    } = entry;
+    const fullName = `${entry.name.title} ${entry.name.first} ${entry.name.last}`;
+    return { avatar, fullName, gender, country, timestamp, email, phone };
+  });
+  return { ...formattedData };
+});
 </script>
 
 <style scoped lang="scss"></style>
