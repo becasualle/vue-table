@@ -99,4 +99,4 @@ export interface Picture {
   thumbnail: string;
 }
 
-export const data = JSON.parse(JSON.stringify(dataJSON)) as Data;
+export const apiData = JSON.parse(JSON.stringify(dataJSON));
