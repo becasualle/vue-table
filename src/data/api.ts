@@ -1,4 +1,6 @@
-export interface Typescript {
+import dataJSON from "./api.json";
+
+export interface Data {
   results: Result[];
   info: Info;
 }
@@ -96,3 +98,5 @@ export interface Picture {
   medium: string;
   thumbnail: string;
 }
+
+export const data = JSON.parse(JSON.stringify(dataJSON)) as Data;
