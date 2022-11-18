@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="entry in filteredData" :key="entry.phone">
+      <tr v-for="entry in data" :key="entry.phone">
         <td v-for="(value, _, index) in entry" :key="index">
           {{ value }}
         </td>
@@ -22,20 +22,10 @@
 import { computed } from "vue";
 import type { TableColumns, TableData } from "../App.vue";
 interface Props {
-  search: string;
   data: TableData[];
   columns: TableColumns[];
 }
 const props = defineProps<Props>();
-
-const filteredData = computed(() => {
-  return props.data.filter((entry) => {
-    // @ts-ignore
-    return Object.values(entry).some((value: string) =>
-      value.toLowerCase().trim().includes(props.search.toLowerCase().trim())
-    );
-  });
-});
 </script>
 
 <style lang="scss" scoped>

@@ -4,10 +4,13 @@
       <label for="search">Поиск по значению</label>
       <input type="text" name="search" id="search" v-model="search" />
     </form>
+    <div class="pagination-btns">
+      <button v-for="num in pageNumbers" :key="num">{{ num }}</button>
+    </div>
   </header>
 
   <main>
-    <DataTable :data="tableData" :columns="tableColumns" :search="search" />
+    <DataTable :data="filteredData" :columns="tableColumns" />
   </main>
 </template>
 
@@ -94,6 +97,25 @@ const tableData = computed(() => {
 
   return formattedData;
 });
+
+// Filtration by search word
+const filteredData = computed(() => {
+  return tableData.value.filter((entry) => {
+    // @ts-ignore
+    return Object.values(entry).some((value: string) =>
+      value.toLowerCase().trim().includes(search.value.toLowerCase().trim())
+    );
+  });
+});
+
+// Pagination
+const numOfPagesFilteredData = computed(() =>
+  Math.ceil(filteredData.value.length / 20)
+);
+
+const pageNumbers = computed(() =>
+  Array.from({ length: numOfPagesFilteredData.value }, (_, index) => index + 1)
+);
 </script>
 
 <style scoped lang="scss"></style>
