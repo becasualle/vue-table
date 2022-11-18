@@ -2,12 +2,12 @@
   <header></header>
 
   <main>
-    <!-- <DataTable :data="tableData" :columns="tableColumns" /> -->
+    <DataTable :data="tableData" :columns="tableColumns" />
   </main>
 </template>
 
 <script setup lang="ts">
-import { watchEffect, ref, computed, onUpdated } from "vue";
+import { watchEffect, ref, computed } from "vue";
 import DataTable from "./components/DataTable.vue";
 import { apiData } from "./data/api";
 import type { Data } from "./data/api";
@@ -20,6 +20,28 @@ export type TableColumns =
   | "Дата рождения"
   | "Email"
   | "Телефон";
+
+export interface TableData {
+  avatar: string;
+  fullName: string;
+  gender: string;
+  country: string;
+  timestamp: string;
+  email: string;
+  phone: string;
+}
+
+const defaultTableData: TableData[] = [
+  {
+    avatar: "",
+    fullName: "",
+    gender: "",
+    country: "",
+    timestamp: "",
+    email: "",
+    phone: "",
+  },
+];
 
 // Get data for the table
 const tableInfo = ref<Data | null>(null);
@@ -46,7 +68,11 @@ const tableColumns: TableColumns[] = [
 
 // Get rid of redundant information from API data leaving only what is necessary for table data
 const tableData = computed(() => {
-  const formattedData = tableInfo.value?.results.map((entry) => {
+  if (!tableInfo.value) {
+    return defaultTableData;
+  }
+
+  const formattedData = tableInfo.value.results.map((entry) => {
     const {
       picture: { thumbnail: avatar },
       gender,
@@ -58,7 +84,8 @@ const tableData = computed(() => {
     const fullName = `${entry.name.title} ${entry.name.first} ${entry.name.last}`;
     return { avatar, fullName, gender, country, timestamp, email, phone };
   });
-  return { ...formattedData };
+
+  return formattedData;
 });
 </script>
 
