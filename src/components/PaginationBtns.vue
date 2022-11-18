@@ -1,16 +1,19 @@
 <template>
-  <div class="buttons" @click="counter.increment">
-    <button v-for="num in pageNumbers" :key="num" class="page-btn">
+  <div class="buttons">
+    <button
+      v-for="num in pageNumbers"
+      :key="num"
+      :class="['page-btn', { active: table.currPageNum === num }]"
+      @click="() => table.setPageNum(num)"
+    >
       {{ num }}
     </button>
   </div>
-  <div>{{ counter.count }}</div>
-  <div>{{ counter.doubleCount }}</div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useCounterStore } from "../stores/counter";
+import { useTableStore } from "../stores/table";
 
 interface Props {
   pagesNum: number;
@@ -18,16 +21,16 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const counter = useCounterStore();
+const table = useTableStore();
 // @ts-ignore
-window.stores = { counter };
+window.stores = { table };
 
 const pageNumbers = computed(() =>
   Array.from({ length: props.pagesNum }, (_, index) => index + 1)
 );
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .buttons {
   background: var(--primary-100);
   border-radius: var(--borderRadius);
@@ -44,9 +47,9 @@ const pageNumbers = computed(() =>
   border-radius: var(--borderRadius);
   cursor: pointer;
 
-  /* &.active {
+  &.active {
     background: var(--primary-500);
     color: var(--white);
-  } */
+  }
 }
 </style>

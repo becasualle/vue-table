@@ -4,7 +4,7 @@
       <tr>
         <th v-for="(name, index) in columns" :key="index">
           {{ name }}
-          <span class="arrow asc"></span>
+          <!-- <span class="arrow asc"></span> -->
         </th>
       </tr>
     </thead>
@@ -33,8 +33,8 @@ table {
   width: 100%;
 }
 th {
-  background-color: cornflowerblue;
-  color: lightgray;
+  background-color: var(--primary-600);
+  color: #fff;
   cursor: pointer;
 }
 
