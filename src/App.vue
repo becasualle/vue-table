@@ -1,13 +1,15 @@
 <template>
-  <header>
-    <form>
+  <header class="header">
+    <form class="search-form">
       <label for="search">Поиск по значению</label>
       <input type="text" name="search" id="search" v-model="search" />
     </form>
-    <PaginationBtns
-      v-if="numOfPagesFilteredData > 1"
-      :pages-num="numOfPagesFilteredData"
-    />
+    <div class="pagination-btns">
+      <PaginationBtns
+        v-if="numOfPagesFilteredData > 1"
+        :pages-num="numOfPagesFilteredData"
+      />
+    </div>
   </header>
 
   <main>
@@ -115,4 +117,19 @@ const numOfPagesFilteredData = computed(() =>
 );
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.header {
+  margin: 1rem auto;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.search-form {
+}
+
+.pagination-btns {
+}
+</style>
