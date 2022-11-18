@@ -4,9 +4,10 @@
       <label for="search">Поиск по значению</label>
       <input type="text" name="search" id="search" v-model="search" />
     </form>
-    <div class="pagination-btns">
-      <button v-for="num in pageNumbers" :key="num">{{ num }}</button>
-    </div>
+    <PaginationBtns
+      v-if="numOfPagesFilteredData > 1"
+      :pages-num="numOfPagesFilteredData"
+    />
   </header>
 
   <main>
@@ -16,7 +17,7 @@
 
 <script setup lang="ts">
 import { watchEffect, ref, computed } from "vue";
-import DataTable from "./components/DataTable.vue";
+import { DataTable, PaginationBtns } from "./components";
 import { apiData } from "./data/api";
 import type { Data } from "./data/api";
 
@@ -111,10 +112,6 @@ const filteredData = computed(() => {
 // Pagination
 const numOfPagesFilteredData = computed(() =>
   Math.ceil(filteredData.value.length / 20)
-);
-
-const pageNumbers = computed(() =>
-  Array.from({ length: numOfPagesFilteredData.value }, (_, index) => index + 1)
 );
 </script>
 
