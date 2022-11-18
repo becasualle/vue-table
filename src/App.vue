@@ -13,7 +13,7 @@
   </header>
 
   <main>
-    <DataTable :data="filteredData" :columns="tableColumns" />
+    <DataTable :data="pageData" :columns="tableColumns" />
   </main>
 </template>
 
@@ -22,6 +22,7 @@ import { watchEffect, ref, computed } from "vue";
 import { DataTable, PaginationBtns } from "./components";
 import { apiData } from "./data/api";
 import type { Data } from "./data/api";
+import { useTableStore } from "./stores/table";
 
 export type TableColumns =
   | "Аватар"
@@ -112,9 +113,28 @@ const filteredData = computed(() => {
 });
 
 // Pagination
+const table = useTableStore();
+// @ts-ignore
+window.stores = { table };
+
+// calculate how many pages of filtered data are existing
 const numOfPagesFilteredData = computed(() =>
   Math.ceil(filteredData.value.length / 20)
 );
+
+// Get data for the page
+const pageData = computed(() => {
+  // when only one page don't need to compute page data
+  if (numOfPagesFilteredData.value === 1) return filteredData.value;
+
+  // cut piece of data for current page
+  // when page = 1, startindex = 0, endIndex = 20 and cut 20 results with indexes from 0 to 19
+  // when page = 2, startindex = 20, endIndex = 40 (20 elements with idx from 20 to 39)
+
+  const startIndex = (table.currPageNum - 1) * 20;
+  const endIndex = startIndex + 20;
+  return filteredData.value.slice(startIndex, endIndex);
+});
 </script>
 
 <style scoped lang="scss">

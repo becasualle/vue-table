@@ -35,7 +35,7 @@ table {
 th {
   background-color: var(--primary-600);
   color: #fff;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 th,
