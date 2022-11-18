@@ -1,8 +1,13 @@
 <template>
-  <header></header>
+  <header>
+    <form>
+      <label for="search">Поиск по значению</label>
+      <input type="text" name="search" id="search" v-model="search" />
+    </form>
+  </header>
 
   <main>
-    <DataTable :data="tableData" :columns="tableColumns" />
+    <DataTable :data="tableData" :columns="tableColumns" :search="search" />
   </main>
 </template>
 
@@ -42,6 +47,8 @@ const defaultTableData: TableData[] = [
     phone: "",
   },
 ];
+
+const search = ref("");
 
 // Get data for the table
 const tableInfo = ref<Data | null>(null);
