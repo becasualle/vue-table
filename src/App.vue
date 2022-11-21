@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <!-- <header class="header">
     <form class="search-form">
       <label for="search">Поиск по значению</label>
       <input type="text" name="search" id="search" v-model="search" />
@@ -14,8 +14,17 @@
 
   <main>
     <DataTable :data="pageData" :columns="tableColumns" />
-  </main>
+  </main> -->
+  <RouterLink to="/">Home</RouterLink>
+  <RouterLink to="/clients">Clients</RouterLink>
+  <RouterView />
 </template>
+
+<!-- TODO: установить vue router -->
+<!-- TODO: сделать router-view в App.vue -->
+<!-- TODO: Сделать страницу Clients, содержание которой как у App.vue сейчас -->
+<!-- TODO: Когда меняется значение search, меняется и query param + происходит фильтрация -->
+<!-- TODO: когда пользователь переходит по query param, значение записывается в search и данные фильтруются -->
 
 <script setup lang="ts">
 import { watchEffect, ref, computed } from "vue";
@@ -23,6 +32,7 @@ import { DataTable, PaginationBtns } from "./components";
 import { apiData } from "./data/api";
 import type { Data } from "./data/api";
 import { useTableStore } from "./stores/table";
+import { RouterLink, RouterView } from "vue-router";
 
 export type TableColumns =
   | "Аватар"
@@ -122,7 +132,7 @@ const numOfPagesFilteredData = computed(() =>
   Math.ceil(filteredData.value.length / 20)
 );
 
-// Get data for the page
+// Get data for the current page
 const pageData = computed(() => {
   // when only one page don't need to compute page data
   if (numOfPagesFilteredData.value === 1) return filteredData.value;
@@ -130,7 +140,6 @@ const pageData = computed(() => {
   // cut piece of data for current page
   // when page = 1, startindex = 0, endIndex = 20 and cut 20 results with indexes from 0 to 19
   // when page = 2, startindex = 20, endIndex = 40 (20 elements with idx from 20 to 39)
-
   const startIndex = (table.currPageNum - 1) * 20;
   const endIndex = startIndex + 20;
   return filteredData.value.slice(startIndex, endIndex);
