@@ -1,8 +1,16 @@
 <template>
   <header class="header">
-    <form class="search-form">
-      <label for="search">Поиск по значению</label>
-      <input type="text" name="search" id="search" v-model="search" />
+    <form class="search">
+      <label for="search" class="search__label">Поиск по значению</label>
+      <input
+        type="text"
+        name="search"
+        id="search"
+        v-model="search"
+        placeholder="например: Ukraine"
+        class="search__input"
+      />
+      <span class="search__cross" @click="handleClear">❌</span>
     </form>
     <div class="pagination-btns">
       <PaginationBtns
@@ -18,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, ref, computed, onMounted, watch } from "vue";
+import { watchEffect, ref, computed, watch } from "vue";
 import { DataTable, PaginationBtns } from "../components";
 import { apiData } from "../data/api";
 import type { Data } from "../data/api";
@@ -106,13 +114,13 @@ const search = ref("");
 const router = useRouter();
 const route = useRoute();
 
-if (route.query.search) {
+if ("search" in route.query) {
   search.value = route.query.search as string;
 }
 
 watch(search, () => {
-  if (route.query.search !== search.value) {
-    route.query.search = search.value;
+  if (search.value && route.query.search !== search.value) {
+    router.push({ path: "/", query: { search: search.value } });
   }
 });
 
@@ -125,7 +133,12 @@ const filteredData = computed(() => {
   });
 });
 
-// Pagination
+const handleClear = () => {
+  search.value = "";
+  router.push({ path: "/" });
+};
+
+// PAGINATION
 const table = useTableStore();
 // @ts-ignore
 window.stores = { table };
@@ -157,5 +170,23 @@ const pageData = computed(() => {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.search {
+  &__label {
+    margin-right: 0.5rem;
+  }
+  &__input {
+    border: 1px solid var(--grey-300);
+    padding: 8px 16px;
+    border-radius: var(--borderRadius);
+    background-color: #fff;
+    box-shadow: var(--shadow-1);
+  }
+  &__cross {
+    font-size: 14px;
+    margin-left: 0.25rem;
+    cursor: pointer;
+  }
 }
 </style>
