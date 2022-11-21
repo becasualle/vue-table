@@ -9,8 +9,11 @@
     </thead>
     <tbody>
       <tr v-for="entry in data" :key="entry.phone">
-        <td v-for="(value, _, index) in entry" :key="index">
-          {{ value }}
+        <td v-for="(value, key, index) in entry" :key="index">
+          <div v-if="key === 'avatar'">
+            <img :src="value" alt="profile avatar" />
+          </div>
+          <div v-else>{{ value }}</div>
         </td>
       </tr>
     </tbody>
@@ -30,17 +33,21 @@ const props = defineProps<Props>();
 table {
   width: 100%;
   font-size: 14px;
-}
-th {
-  background-color: var(--primary-600);
-  color: #fff;
-  text-align: left;
-  /* cursor: pointer; */
-}
+  th {
+    background-color: var(--primary-600);
+    color: #fff;
+    text-align: left;
+    /* cursor: pointer; */
+  }
 
-th,
-td {
-  min-width: 120px;
-  padding: 10px 20px;
+  th,
+  td {
+    padding: 10px 20px;
+  }
+  td {
+    img {
+      border-radius: 50%;
+    }
+  }
 }
 </style>

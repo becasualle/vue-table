@@ -32,6 +32,7 @@ import { apiData } from "../data/api";
 import type { Data } from "../data/api";
 import { useTableStore } from "../stores/table";
 import { useRouter, useRoute } from "vue-router";
+import dayjs from "dayjs";
 
 export type TableColumns =
   | "Аватар"
@@ -93,7 +94,7 @@ const tableData = computed(() => {
     return defaultTableData;
   }
 
-  const formattedData = tableInfo.value.results.map((entry) => {
+  const formattedData = tableInfo.value.results.map((entry, idx) => {
     const {
       picture: { thumbnail: avatar },
       gender,
@@ -103,7 +104,15 @@ const tableData = computed(() => {
       phone,
     } = entry;
     const fullName = `${entry.name.title} ${entry.name.first} ${entry.name.last}`;
-    return { avatar, fullName, gender, country, timestamp, email, phone };
+    return {
+      avatar,
+      fullName,
+      gender,
+      country,
+      timestamp: dayjs(timestamp).format("DD.MM.YYYY"),
+      email,
+      phone,
+    };
   });
 
   return formattedData;
@@ -170,6 +179,7 @@ const pageData = computed(() => {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .search {
