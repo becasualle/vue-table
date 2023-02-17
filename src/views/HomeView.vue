@@ -91,6 +91,8 @@ const tableColumns: TableColumns[] = [
 ];
 
 // Get rid of redundant information from API data leaving only what is necessary for table data
+const showData = ref(false);
+
 const tableData = computed(() => {
   if (!tableInfo.value) {
     return defaultTableData;

@@ -26,17 +26,23 @@ interface Props {
   data: TableData[];
   columns: TableColumns[];
 }
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <style lang="scss" scoped>
 table {
   width: 100%;
   font-size: 14px;
+  table-layout: fixed;
+  border-collapse: collapse;
+
   th {
     background-color: var(--primary-600);
     color: #fff;
     text-align: left;
+    &:first-child {
+      width: 10%;
+    }
     /* cursor: pointer; */
   }
 
