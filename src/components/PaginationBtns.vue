@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useTableStore } from "../stores/table";
 import { useRouter } from "vue-router";
 
@@ -24,11 +24,6 @@ const props = defineProps<Props>();
 const router = useRouter();
 
 const table = useTableStore();
-const currentPage = computed(() => table.currPageNum);
-// console.log(table.currPageNum);
-
-// // @ts-ignore
-// window.stores = { table };
 
 const pageNumbers = computed(() =>
   Array.from({ length: props.pagesNum }, (_, index) => index + 1)
@@ -38,6 +33,13 @@ const onPageChange = (pageNumber: number) => {
   table.setPageNum(pageNumber);
   router.push({ query: { page: pageNumber } });
 };
+
+onMounted(() => {
+  const { page } = router.currentRoute.value.query;
+  if (page) {
+    table.setPageNum(+page);
+  }
+});
 </script>
 
 <style scoped lang="scss">

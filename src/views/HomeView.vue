@@ -6,7 +6,7 @@
         type="text"
         name="search"
         id="search"
-        v-model="search"
+        v-model.trim="search"
         placeholder="например: Ukraine"
         class="search__input"
       />
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, ref, computed, watch, reactive } from "vue";
+import { watchEffect, ref, computed, watch } from "vue";
 import { DataTable, PaginationBtns } from "../components";
 import { apiData } from "../data/api";
 import type { Data } from "../data/api";
@@ -129,15 +129,15 @@ if ("search" in route.query) {
 
 watch(search, () => {
   if (search.value && route.query.search !== search.value) {
-    router.push({ path: "/", query: { search: search.value } });
+    table.setPageNum(1);
+    router.push({ path: "/", query: { search: search.value, page: 1 } });
   }
 });
 
 const filteredData = computed(() => {
   return tableData.value.filter((entry) => {
-    // @ts-ignore
     return Object.values(entry).some((value: string) =>
-      value.toLowerCase().trim().includes(search.value.toLowerCase().trim())
+      value.toLowerCase().trim().includes(search.value)
     );
   });
 });
@@ -147,10 +147,7 @@ const handleClear = () => {
   router.push({ path: "/" });
 };
 
-// PAGINATION
 const table = useTableStore();
-// @ts-ignore
-window.stores = { table };
 
 // calculate how many pages of filtered data are existing
 const numOfPagesFilteredData = computed(() =>
