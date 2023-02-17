@@ -4,7 +4,7 @@
       v-for="num in pageNumbers"
       :key="num"
       :class="['page-btn', { active: table.currPageNum === num }]"
-      @click="() => table.setPageNum(num)"
+      @click="() => onPageChange(num)"
     >
       {{ num }}
     </button>
@@ -14,20 +14,30 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "../stores/table";
+import { useRouter } from "vue-router";
 
 interface Props {
   pagesNum: number;
 }
 
 const props = defineProps<Props>();
+const router = useRouter();
 
 const table = useTableStore();
-// @ts-ignore
-window.stores = { table };
+const currentPage = computed(() => table.currPageNum);
+// console.log(table.currPageNum);
+
+// // @ts-ignore
+// window.stores = { table };
 
 const pageNumbers = computed(() =>
   Array.from({ length: props.pagesNum }, (_, index) => index + 1)
 );
+
+const onPageChange = (pageNumber: number) => {
+  table.setPageNum(pageNumber);
+  router.push({ query: { page: pageNumber } });
+};
 </script>
 
 <style scoped lang="scss">

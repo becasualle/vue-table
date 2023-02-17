@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, ref, computed, watch } from "vue";
+import { watchEffect, ref, computed, watch, reactive } from "vue";
 import { DataTable, PaginationBtns } from "../components";
 import { apiData } from "../data/api";
 import type { Data } from "../data/api";
