@@ -10,7 +10,9 @@
         placeholder="например: Ukraine"
         class="search__input"
       />
-      <span class="search__cross" @click="handleClear">❌</span>
+      <span class="search__cross" @click="handleClear"
+        ><mdicon name="closeCircle" class="search__icon"
+      /></span>
     </form>
     <div class="pagination-btns">
       <PaginationBtns
@@ -144,6 +146,7 @@ const filteredData = computed(() => {
 
 const handleClear = () => {
   search.value = "";
+  table.setPageNum(1);
   router.push({ path: "/" });
 };
 
@@ -182,6 +185,13 @@ const pageData = computed(() => {
 .search {
   &__label {
     margin-right: 0.5rem;
+  }
+  &__icon {
+    color: #0f172a;
+    transition: color, cubic-bezier(0.4, 0, 0.2, 1), 150ms;
+    &:hover {
+      color: #94a3b8;
+    }
   }
   &__input {
     border: 1px solid var(--grey-300);

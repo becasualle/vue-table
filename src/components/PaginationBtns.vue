@@ -31,7 +31,9 @@ const pageNumbers = computed(() =>
 
 const onPageChange = (pageNumber: number) => {
   table.setPageNum(pageNumber);
-  router.push({ query: { page: pageNumber } });
+  const { query } = router.currentRoute.value;
+  console.log(query);
+  router.push({ query: { ...query, page: pageNumber } });
 };
 
 onMounted(() => {
